@@ -1,5 +1,6 @@
-#include <limits.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include "push_swap.h"
 
 void	error(void)
 {
@@ -7,58 +8,16 @@ void	error(void)
 	exit(1);
 }
 
-_Bool	is_num(char c)
+int		*insertion_sort(int *a)
 {
-	return (c >= '0' || c <= '9');
-}
+	static int	sorted[100000];
 
-int		parse_int(char *str)
-{
-	int		i;
-	long	res;
-	int		neg;
-	int		d;
-	
-	i = 0;
-	res = 0;
-	neg = 1;
-	if (str[i] == '-')
-	{
-		neg = -1;
-		i++;
-	}
-	while (str[i] && is_num(str[i]))
-	{
-		res = res * 10 + (str[i] - '0') * neg;
-	}
-	if (res > INT_MAX || res < INT_MIN)
-		error();
-	return (res);
-}
-
-int	*parse_arg(int ac, char **av)
-{
-	int		i;
-	int		*tab;
-
-	i = 1;
-	tab = malloc(ac * sizeof(*tab));
-	if (!tab)
-		return (NULL);
-	while (i < ac)
-	{
-		tab[i - 1] = parse_int(str);
-		i++;
-	}
+	return (sorted);
 }
 
 int	main(int ac, char **av)
 {
-	int		*tab;
-	int		len;
+	int		*a;
 
-	if (ac < 2)
-		tab = parse_arg(ac, av);
-	if (!tab)
-		error();
+	a = foreach_arg(ac, av);
 }

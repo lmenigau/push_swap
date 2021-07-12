@@ -1,4 +1,4 @@
-SRC		= main.c
+SRC		= main.c foreach_arg.c
 OBJ		= $(SRC:.c=.o)
 CFLAGS	= -g -Wall -Wextra -fsanitize=address
 NAME	= push_swap
