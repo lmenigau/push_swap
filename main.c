@@ -10,14 +10,29 @@ void	error(void)
 
 int		*insertion_sort(int *a)
 {
-	static int	sorted[100000];
-
+	static int	sorted[MAX_SIZE];
+	(void)a;
 	return (sorted);
 }
 
-int	main(int ac, char **av)
+void	init_stack(int	*a)
+{
+	int		i;
+
+	i = 0;
+	while (i < MAX_SIZE)
+	{
+		a[i] = i;
+		i++;
+	}
+}
+
+int		main(int ac, char **av)
 {
 	int		*a;
+	int		stack[MAX_SIZE];
 
 	a = foreach_arg(ac, av);
+	insertion_sort(a);
+	init_stack(stack);
 }
