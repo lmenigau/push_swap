@@ -15,7 +15,7 @@ int		*insertion_sort(int *a)
 	return (sorted);
 }
 
-void	init_stack(int	*a)
+void	init_stack(int	*a, int len)
 {
 	int		i;
 
@@ -43,6 +43,6 @@ int		main(int ac, char **av)
 
 	a = foreach_arg(ac, av);
 	insertion_sort(a);
-	init_stack(list);
+	init_stack(list, len);
 	sqsort(stacks, 0, len);
 }

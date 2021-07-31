@@ -50,7 +50,7 @@ void	parse_arg(char *arg, int * restrict tab, int * restrict count)
 	}
 }
 
-int	*foreach_arg(int ac, char **av)
+t_array	foreach_arg(int ac, char **av)
 {
 	int		i;
 	static int	a[100000];
@@ -62,6 +62,6 @@ int	*foreach_arg(int ac, char **av)
 		parse_arg(av[i], a, &count);
 		i++;
 	}
-	return (a);
+	return ((t_array){a, count});
 }
 
