@@ -27,12 +27,22 @@ void	init_stack(int	*a)
 	}
 }
 
+void	sqsort(int *a, int	*list, _Bool stack, int len)
+{
+		int pivot;
+
+}
+
 int		main(int ac, char **av)
 {
 	int		*a;
-	int		stack[MAX_SIZE];
+	int		list[MAX_SIZE];
+	int		heada;
+	int		headb;
+	int		len = 0;
 
 	a = foreach_arg(ac, av);
 	insertion_sort(a);
-	init_stack(stack);
+	init_stack(list);
+	sqsort(a, list, 0, len);
 }
