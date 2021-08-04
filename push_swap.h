@@ -20,7 +20,7 @@ typedef	struct	s_array
 }				t_array;
 
 void	error(void);
-int		*foreach_arg(int ac, char **av);
+t_array	foreach_arg(int ac, char **av);
 
 
 #endif

@@ -8,7 +8,7 @@ void	error(void)
 	exit(1);
 }
 
-int		*insertion_sort(int *a)
+int		*insertion_sort(t_array a)
 {
 	static int	sorted[MAX_SIZE];
 	(void)a;
@@ -36,10 +36,10 @@ void	sqsort(t_stacks stacks, _Bool stack, int len)
 
 int		main(int ac, char **av)
 {
-	int		*a;
 	int		list[MAX_SIZE];
 	int		len = 0;
 	t_stacks	stacks;
+	t_array		a;
 
 	a = foreach_arg(ac, av);
 	insertion_sort(a);
