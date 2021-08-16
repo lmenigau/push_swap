@@ -11,7 +11,22 @@ void	error(void)
 int		*insertion_sort(t_array a)
 {
 	static int	sorted[MAX_SIZE];
-	(void)a;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	while (i < a.len)
+	{
+		sorted[i] = a.a[i];
+		j = i + 1;
+		while (sorted[j - 1] < sorted[j])
+		{
+			swap(&sorted[j], &sorted[j]);
+			j--;
+		}
+		i++;
+	}
 	return (sorted);
 }
 
