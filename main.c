@@ -8,14 +8,22 @@ void	error(void)
 	exit(1);
 }
 
-int		*insertion_sort(t_array a)
+void	swap(int *a, int *b)
+{
+	int		c;
+
+	c = *a;
+	*a = *b;
+	*b = c;
+}
+
+t_array		insertion_sort(t_array a)
 {
 	static int	sorted[MAX_SIZE];
 	int		i;
 	int		j;
 
 	i = 0;
-	j = 0;
 	while (i < a.len)
 	{
 		sorted[i] = a.a[i];
@@ -27,37 +35,57 @@ int		*insertion_sort(t_array a)
 		}
 		i++;
 	}
-	return (sorted);
+	return ((t_array){sorted, a.len});
 }
 
-void	init_stack(int	*a, int len)
+void	remap(t_array a, t_array sorted)
 {
 	int		i;
+	int		j;
 
 	i = 0;
-	while (i < MAX_SIZE)
+	while (i < a.len)
 	{
-		a[i] = i;
+		j = 0;
+		while (j < sorted.len)
+		{
+			if (a.a[i] == sorted.a[j])
+				a.a[i] = j;
+			j++;
+		}
 		i++;
 	}
 }
 
-void	sqsort(t_stacks stacks, _Bool stack, int len)
+void	init_stack(t_stack *s)
 {
-		int pivot;
+	int		list[MAX_SIZE];
+	int		i;
 
-		pivot = 40;
+	s[0].list = list;
+	s[0].head = 0; 
+	i = 0;
+	while (i < s[0].a.len)
+	{
+		list[i] = i;
+		i++;
+	}
+}
+
+void	sqsort(t_stack *s, _Bool stack, int pivot, int len)
+{
+	s[stack].head = pivot + len;	
 }
 
 int		main(int ac, char **av)
 {
-	int		list[MAX_SIZE];
-	int		len = 0;
-	t_stacks	stacks;
-	t_array		a;
+	t_stack		stacks[2];
+	t_array		sorted;
 
-	a = foreach_arg(ac, av);
-	insertion_sort(a);
-	init_stack(list, len);
-	sqsort(stacks, 0, len);
+
+	stacks[0].a = foreach_arg(ac, av);
+	sorted = insertion_sort(stacks[0].a);
+	remap(stacks[0].a, sorted);
+	init_stack(stacks);
+	sqsort(stacks, 0, stacks[0].a.len / 2, stacks[0].a.len);
 }
