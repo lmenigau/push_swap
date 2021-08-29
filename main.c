@@ -65,16 +65,31 @@ void	init_stack(t_stack *s)
 	s[0].list = list;
 	s[0].head = 0; 
 	i = 0;
-	while (i < s[0].a.len)
+	while (i < s[0].a.len - 1)
 	{
-		list[i] = i;
+		list[i] = i + 1;
 		i++;
 	}
+	list[i] = 0;
+	s[1].head = -1;
+	s[1].list = list;
+	s[1].a = s[0].a;
+}
+
+void	push(t_stack *s, _Bool stack)
+{
+	int		tmp;
+	int		tmp2;
+
+	tmp = s[!stack].head;
+	s[!stack].head = s[stack].list[tmp];
+	tmp2 = s[!stack].head; 
+	s[stack].list[s[stack].head];
 }
 
 void	sqsort(t_stack *s, _Bool stack, int pivot, int len)
 {
-	s[stack].head = pivot + len;	
+	s[stack].head = pivot + len;
 }
 
 int		main(int ac, char **av)
