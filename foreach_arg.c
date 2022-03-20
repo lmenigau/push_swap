@@ -1,7 +1,6 @@
 #include <limits.h>
 #include "push_swap.h"
 
-
 _Bool	is_num(char c)
 {
 	return (c >= '0' && c <= '9');
@@ -12,11 +11,11 @@ _Bool	is_space(char c)
 	return (c == ' ' || (c >= '\t' && c <= '\r'));
 }
 
-int		parse_int(char *str, int *i)
+int	parse_int(char *str, int *i)
 {
 	long	res;
 	int		neg;
-	
+
 	res = 0;
 	neg = 1;
 	while (is_space(str[*i]))
@@ -36,7 +35,7 @@ int		parse_int(char *str, int *i)
 	return (res);
 }
 
-void	parse_arg(char *arg, int * restrict tab, int * restrict count)
+void	parse_arg(char *arg, int *restrict tab, int *restrict count)
 {
 	int		i;
 
@@ -52,7 +51,7 @@ void	parse_arg(char *arg, int * restrict tab, int * restrict count)
 
 t_array	foreach_arg(int ac, char **av)
 {
-	int		i;
+	int			i;
 	static int	a[100000];
 	static int	count;
 
@@ -64,4 +63,3 @@ t_array	foreach_arg(int ac, char **av)
 	}
 	return ((t_array){a, count});
 }
-

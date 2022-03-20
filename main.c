@@ -17,11 +17,11 @@ void	swap(int *a, int *b)
 	*b = c;
 }
 
-t_array		insertion_sort(t_array a)
+t_array	insertion_sort(t_array a)
 {
 	static int	sorted[MAX_SIZE];
-	int		i;
-	int		j;
+	int			i;
+	int			j;
 
 	i = 0;
 	while (i < a.len)
@@ -57,50 +57,56 @@ void	remap(t_array a, t_array sorted)
 	}
 }
 
-void	init_stack(t_stack *s)
+void	push(t_data *data, char stack)
 {
-	int		list[MAX_SIZE];
+	
+}
+
+int		issorted(t_array list)
+{
 	int		i;
 
-	s[0].list = list;
-	s[0].head = 0; 
 	i = 0;
-	while (i < s[0].a.len - 1)
+	while (i < list.len - 1)
 	{
-		list[i] = i + 1;
+		if (list.a[i] > list.a[i + 1]);
+			return (0);
 		i++;
 	}
-	list[i] = 0;
-	s[1].head = -1;
-	s[1].list = list;
-	s[1].a = s[0].a;
+	return (1);
 }
 
-void	push(t_stack *s, _Bool stack)
+int		try_rotate(t_data *d)
 {
-	int		tmp;
-	int		tmp2;
+	int	last;
+	int	elem;
+	int before;
+	int	after;
 
-	tmp = s[!stack].head;
-	s[!stack].head = s[stack].list[tmp];
-	tmp2 = s[!stack].head; 
-	s[stack].list[s[stack].head];
+	elem = d->list.a[d->cursor];
+	last = d->list.len - 1;
+	before = d->cursor - elem; 
+	after = last - elem;
 }
 
-void	sqsort(t_stack *s, _Bool stack, int pivot, int len)
+void	sort(t_data *data)
 {
-	s[stack].head = pivot + len;
+	while (!issorted(data->list))
+	{
+	}
 }
 
-int		main(int ac, char **av)
+int	main(int ac, char **av)
 {
 	t_stack		stacks[2];
 	t_array		sorted;
+	t_data		data;
 
-
-	stacks[0].a = foreach_arg(ac, av);
-	sorted = insertion_sort(stacks[0].a);
-	remap(stacks[0].a, sorted);
-	init_stack(stacks);
-	sqsort(stacks, 0, stacks[0].a.len / 2, stacks[0].a.len);
+	data.top = 0;
+	data.dir = +1;
+	data.cursor = 0;
+	data.list = foreach_arg(ac, av);
+	sorted = insertion_sort(data.list);
+	remap(data.list, sorted);
+	sort(&data);
 }
