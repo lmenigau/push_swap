@@ -97,6 +97,35 @@ int	n_abs(int n)
 		return (n);
 }
 
+void	push(t_data *d, int dist)
+{
+	int i;
+	char *str;
+
+	if (dist < 0)
+		str = "pa\n";
+	else 
+		str = "pb\n";
+	i = 0; 
+}
+
+void 	rb(t_data *d, int dist)
+{
+	int save;
+	int i;
+
+	push(d, dist);
+	save = d->list.a[d->cursor - 1];
+	i = d->cursor - 2;
+	while (i >= 0)
+	{
+		d->list.a[i + 1] = d->list.a[i];
+		i--;
+	}
+	d->list.a[i + 1] = save;
+	write(1, "rb\n", 3);
+}
+
 void 	ra(t_data *d)
 {
 	int save;
@@ -113,100 +142,42 @@ void 	ra(t_data *d)
 	write(1, "ra\n", 3);
 }
 
-int	try_ra(t_data *d)
+int		find(t_array *a, int n)
 {
-	int	last;
-	int	elem;
-	int before;
-	int	after;
+	int		i;
 
-	elem = d->list.a[d->cursor];
-	last = d->list.len - 1;
-	before = n_abs(d->cursor - elem); 
-	after = n_abs(last - elem);
-	return (after - before);
-}
-
-void stacka(t_data *d)
-{
-	int	new;
-	int	val;
-
-	new = 1;
-	while (new)
+	i = 0;
+	while (i < a.len)
 	{
-		val = try_ra(d);
-		if (val < 0)
-		{
-			print_stack(d->list, d->cursor);
-			new = 1;
-			ra(d);
-		}
-		if ();
-		else
-			new = 0;
-	}
-}
-
-int	try_rb(t_data *d)
-{
-	int	last;
-	int	elem;
-	int before;
-	int	after;
-
-	elem = d->list.a[d->cursor - 1];
-	last = 0;
-	before = n_abs(d->cursor - 1 - elem); 
-	after = n_abs(last - elem);
-	return (after - before);
-}
-
-void 	rb(t_data *d)
-{
-	int save;
-	int i;
-
-	save = d->list.a[d->cursor - 1];
-	i = d->cursor - 2;
-	while (i >= 0)
-	{
-		d->list.a[i + 1] = d->list.a[i];
-		i--;
-	}
-	d->list.a[i + 1] = save;
-	write(1, "rb\n", 3);
-}
-
-void stackb(t_data *d)
-{
-	int	new;
-	int	val;
-
-	new = 1;
-	while (new)
-	{
-		print_stack(d->list, d->cursor);
-		val = try_rb(d);
-		fflush(stdout);
-		if (val < 0)
-		{
-			new = 1;
-			rb(d);
-		}
-		else
-			new = 0;
-	}
+		if (a.a[i] == n)
+			return (i);
+		i++;
+	}	
 }
 
 void	sort(t_data *d)
 {
-	while (!issorted(d->list))
+	int		small;
+	int		big;
+	int		s;
+	int		b;
+
+	small = 0;
+	big = d->a.len - 1;
+	while (small < big)
 	{
-		if (d->cursor > 1)
-			stackb(d);
-		stacka(d);
-		push(d);
+		s = find(d->a, small) - d->cursor;
+		b = find(d->a, big) - d->cursor + 1;
+		if (n_abs(s) < n_abs(b))
+		{
+			small++;
+			rra(d, dist);
+		}
+		else
+		{
+			big--;
+			rb(d, dist);
+		}
 	}
 }
 
