@@ -62,19 +62,6 @@ void	remap(t_array a, t_array sorted)
 	}
 }
 
-void	push(t_data *d)
-{
-		if(d->cursor == d->list.len - 1)
-			d->dir = -1;
-		else if (d->cursor + d->dir < 0)
-			d->dir = +1;	
-		d->cursor += d->dir;
-		if (d->dir > 0)
-			write(1, "pb\n", 3);
-		else
-			write(1, "pa\n", 3);
-}
-
 int		issorted(t_array list)
 {
 	int		i;
@@ -102,11 +89,17 @@ void	push(t_data *d, int dist)
 	int i;
 	char *str;
 
+	d->cursor += dist;
 	if (dist < 0)
 		str = "pa\n";
 	else 
 		str = "pb\n";
 	i = 0; 
+	while (i < n_abs(dist))
+	{
+		write(1, str, 3);
+		i++;
+	}
 }
 
 void 	rb(t_data *d, int dist)
@@ -114,6 +107,8 @@ void 	rb(t_data *d, int dist)
 	int save;
 	int i;
 
+	if (d->cursor < 1)
+		return ;
 	push(d, dist);
 	save = d->list.a[d->cursor - 1];
 	i = d->cursor - 2;
@@ -126,11 +121,12 @@ void 	rb(t_data *d, int dist)
 	write(1, "rb\n", 3);
 }
 
-void 	ra(t_data *d)
+void 	ra(t_data *d, int dist)
 {
 	int save;
 	int i;
 
+	push(d, dist);
 	save = d->list.a[d->cursor];
 	i = d->cursor + 1;
 	while (i < d->list.len)
@@ -142,17 +138,48 @@ void 	ra(t_data *d)
 	write(1, "ra\n", 3);
 }
 
-int		find(t_array *a, int n)
+void 	rrb(t_data *d, int dist)
+{
+	int save;
+	int i;
+
+	push(d, dist);
+	save = d->list.a[d->cursor - 1];
+	i = d->list.len - 2;
+	while (i >= d->cursor)
+	{
+		d->list.a[i + 1] = d->list.a[i];
+		i--;
+	}
+	d->list.a[i + 1] = save;
+	write(1, "rra\n", 4);
+}
+
+void 	rra(t_data *d, int dist)
+{
+	int save;
+	int i;
+
+	push(d, dist);
+	save = d->list.a[d->list.len - 1];
+	i = d->list.len - 2;
+	while (i >= d->cursor)
+	{
+		d->list.a[i + 1] = d->list.a[i];
+		i--;
+	}
+	d->list.a[i + 1] = save;
+	write(1, "rra\n", 4);
+}
+
+int		find(t_array a, int n)
 {
 	int		i;
 
 	i = 0;
-	while (i < a.len)
-	{
-		if (a.a[i] == n)
-			return (i);
+	while (i < a.len && a.a[i] != n)
 		i++;
-	}	
+	return (i);
 }
 
 void	sort(t_data *d)
@@ -161,23 +188,26 @@ void	sort(t_data *d)
 	int		big;
 	int		s;
 	int		b;
+	int		i;
 
+	i = 0;
 	small = 0;
-	big = d->a.len - 1;
-	while (small < big)
+	big = d->list.len - 1;
+	while (i < d->list.len)
 	{
-		s = find(d->a, small) - d->cursor;
-		b = find(d->a, big) - d->cursor + 1;
-		if (n_abs(s) < n_abs(b))
+		s = find(d->list, small) - d->cursor;
+		b = find(d->list, big) - d->cursor  - 1;
+		if (s && n_abs(s) < n_abs(b))
 		{
 			small++;
-			rra(d, dist);
+			ra(d, s);
 		}
-		else
-		{
+		else if (b)
+		{ 
+			rb(d, b);
 			big--;
-			rb(d, dist);
 		}
+		i++;
 	}
 }
 
@@ -195,4 +225,5 @@ int	main(int ac, char **av)
 	if (issorted(data.list))
 		error();
 	sort(&data);
+	print_stack(data.list, data.cursor); 
 }
