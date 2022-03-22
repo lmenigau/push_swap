@@ -188,14 +188,11 @@ void	sort(t_data *d)
 	int		big;
 	int		s;
 	int		b;
-	int		i;
 
-	i = 0;
 	small = 0;
 	big = d->list.len - 1;
-	while (big >= 0)
+	while (big >= small)
 	{
-		print_stack(d->list, d->cursor); 
 		s = find(d->list, small) - d->cursor;
 		b = find(d->list, big) - (d->cursor - 1);
 		if (n_abs(s) < n_abs(b))
@@ -208,7 +205,6 @@ void	sort(t_data *d)
 			rb(d, b);
 			big--;
 		}
-		i++;
 	}
 }
 
