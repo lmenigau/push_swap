@@ -107,9 +107,9 @@ void 	rb(t_data *d, int dist)
 	int save;
 	int i;
 
+	push(d, dist);
 	if (d->cursor < 1)
 		return ;
-	push(d, dist);
 	save = d->list.a[d->cursor - 1];
 	i = d->cursor - 2;
 	while (i >= 0)
@@ -193,16 +193,17 @@ void	sort(t_data *d)
 	i = 0;
 	small = 0;
 	big = d->list.len - 1;
-	while (i < d->list.len)
+	while (big >= 0)
 	{
+		print_stack(d->list, d->cursor); 
 		s = find(d->list, small) - d->cursor;
-		b = find(d->list, big) - d->cursor  - 1;
-		if (s && n_abs(s) < n_abs(b))
+		b = find(d->list, big) - (d->cursor - 1);
+		if (n_abs(s) < n_abs(b))
 		{
 			small++;
 			ra(d, s);
 		}
-		else if (b)
+		else
 		{ 
 			rb(d, b);
 			big--;
