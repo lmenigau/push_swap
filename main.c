@@ -144,14 +144,14 @@ void 	rrb(t_data *d, int dist)
 	int i;
 
 	push(d, dist);
-	save = d->list.a[d->cursor - 1];
-	i = d->list.len - 2;
-	while (i >= d->cursor)
+	save = d->list.a[0];
+	i = 1;
+	while (i <= d->cursor - 1)
 	{
-		d->list.a[i + 1] = d->list.a[i];
-		i--;
+		d->list.a[i - 1] = d->list.a[i];
+		i++;
 	}
-	d->list.a[i + 1] = save;
+	d->list.a[i - 1] = save;
 	write(1, "rra\n", 4);
 }
 
@@ -162,8 +162,8 @@ void 	rra(t_data *d, int dist)
 
 	push(d, dist);
 	save = d->list.a[d->list.len - 1];
-	i = d->list.len - 2;
-	while (i >= d->cursor)
+	i = d->list.len - 1;
+	while (i > d->cursor)
 	{
 		d->list.a[i + 1] = d->list.a[i];
 		i--;
@@ -250,6 +250,12 @@ void	rr(t_data  *d)
 {
 			ra(d, 0);
 			rb(d, 0);
+}
+
+void	rrr(t_data  *d)
+{
+			rra(d, 0);
+			rrb(d, 0);
 }
 
 void	distrib(t_data *d)
