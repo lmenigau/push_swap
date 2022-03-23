@@ -66,10 +66,10 @@ int		issorted(t_array list)
 {
 	int		i;
 
-	i = 0;
-	while (i < list.len - 1)
+	i = 1;
+	while (i < list.len)
 	{
-		if (list.a[i] > list.a[i + 1])
+		if (list.a[i - 1] > list.a[i])
 			return (0);
 		i++;
 	}
@@ -182,6 +182,92 @@ int		find(t_array a, int n)
 	return (i);
 }
 
+int     try_ra(t_data *d)
+{
+        int     last;
+        int     elem;
+        int before;
+        int     after;
+
+		if (d->cursor > d->list.len - 2)
+			return (0);
+        elem = d->list.a[d->cursor];
+        last = d->list.len - 1;
+        before = n_abs(d->cursor - elem);
+        after = n_abs(last - elem);
+        return (after < before);
+}
+
+int     try_rra(t_data *d)
+{
+        int     last;
+        int     elem;
+        int before;
+        int     after;
+
+		if (d->cursor > d->list.len - 2)
+			return (0);
+        last = d->list.len - 1;
+        elem = d->list.a[last];
+        before = n_abs(d->cursor - elem);
+        after = n_abs(last - elem);
+        return (after < before);
+}
+
+int     try_rb(t_data *d)
+{
+        int     last;
+        int     elem;
+        int before;
+        int     after;
+
+		if (d->cursor < 2)
+			return (0);
+        elem = d->list.a[d->cursor - 1];
+        last = 0;
+        before = n_abs(d->cursor - 1 - elem);
+        after = n_abs(last - elem);
+        return (after < before);
+}
+
+int     try_rrb(t_data *d)
+{
+        int     last;
+        int     elem;
+        int before;
+        int     after;
+
+		if (d->cursor < 2)
+			return (0);
+        last = 0;
+        elem = d->list.a[last];
+        before = n_abs(d->cursor - 1 - elem);
+        after = n_abs(last - elem);
+        return (after < before);
+}
+
+void	rr(t_data  *d)
+{
+			ra(d, 0);
+			rb(d, 0);
+}
+
+void	distrib(t_data *d)
+{
+	while (d->cursor < d->list.len)
+	{
+		print_stack(d->list, d->cursor);
+		if (try_ra(d) && try_rb(d))
+			rr(d);
+		else if (try_ra(d))
+			ra(d, 0);
+		else if (try_rb(d))
+			rb(d, 0);
+		else
+			push(d, 1);
+	}
+}
+
 void	sort(t_data *d)
 {
 	int		small;
@@ -191,14 +277,15 @@ void	sort(t_data *d)
 
 	small = 0;
 	big = d->list.len - 1;
-	while (big >= small)
+	while (big >= 0)
 	{
+		print_stack(d->list, d->cursor);
 		s = find(d->list, small) - d->cursor;
 		b = find(d->list, big) - (d->cursor - 1);
 		if (n_abs(s) < n_abs(b))
 		{
-			small++;
 			ra(d, s);
+			small++;
 		}
 		else
 		{ 
@@ -220,7 +307,11 @@ int	main(int ac, char **av)
 	sorted = insertion_sort(data.list);
 	remap(data.list, sorted);
 	if (issorted(data.list))
+	{
 		error();
+		exit(0);
+	}
+	distrib(&data);
 	sort(&data);
-	print_stack(data.list, data.cursor); 
+	print_stack(data.list, data.cursor);
 }
