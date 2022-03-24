@@ -175,14 +175,14 @@ void 	rra(t_data *d, int dist)
 	int i;
 
 	push(d, dist);
-	save = d->list.a[d->cursor];
-	i = d->cursor + 1;
-	while (i < d->list.len)
+	save = d->list.a[d->list.len - 1];
+	i = d->list.len - 2;
+	while (i >= d->cursor)
 	{
-		d->list.a[i - 1] = d->list.a[i];
-		i++;
+		d->list.a[i + 1] = d->list.a[i];
+		i--;
 	}
-	d->list.a[i - 1] = save;
+	d->list.a[i + 1] = save;
 	write(1, "rra\n", 4);
 }
 
@@ -315,6 +315,7 @@ int		stackb(t_data *d)
 void	distrib(t_data *d)
 {
 	int		move;
+
 	while (d->cursor < d->list.len)
 	{
 		print_stack(d->list, d->cursor);
@@ -322,6 +323,14 @@ void	distrib(t_data *d)
 		move &= stackb(d);
 		if (move)
 			push(d, 1);
+	}
+	while (d->cursor > 0)
+	{
+		print_stack(d->list, d->cursor);
+		move = stacka(d);
+		move &= stackb(d);
+		if (move)
+			push(d, -1);
 	}
 }
 
@@ -332,14 +341,15 @@ void	sort(t_data *d)
 	int		s;
 	int		b;
 
+	distrib(d);
 	small = 0;
 	big = d->list.len - 1;
-	while (big >= 0)
+	while (small < d->list.len)
 	{
 		print_stack(d->list, d->cursor);
 		s = find(d->list, small) - d->cursor;
 		b = find(d->list, big) - (d->cursor - 1);
-		if (n_abs(s) < n_abs(b))
+		if (n_abs(s) <= n_abs(b))
 		{
 			ra(d, s);
 			small++;
@@ -350,6 +360,9 @@ void	sort(t_data *d)
 			big--;
 		}
 	}
+	//push(d, -d->cursor);  
+	fprintf(stderr, "%d\n", d->cursor);
+	fflush(stderr);
 }
 
 void	radix(t_data *d)
@@ -385,6 +398,8 @@ int	main(int ac, char **av)
 	t_array		sorted;
 	t_data		data;
 
+	if (ac < 2)
+		return (0);
 	data.cursor = 0;
 	data.list = foreach_arg(ac, av);
 	sorted = insertion_sort(data.list);
@@ -393,7 +408,7 @@ int	main(int ac, char **av)
 	print_stack(data.list, data.cursor);
 	remap(data.list, sorted);
 	if (issorted(data.list))
-		error();
+		exit(0);
 	print_stack(data.list, data.cursor);
 	if (data.list.len < 6)
 		sort_small(&data);	
