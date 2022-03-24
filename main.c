@@ -340,6 +340,29 @@ void	sort(t_data *d)
 	}
 }
 
+void	radix(t_data *d)
+{
+	int mask;
+	int	i;
+
+	mask = 1;
+	while (mask <= d->list.len)
+	{
+		i = 0;
+		while(i < d->list.len)
+		{
+			print_stack(d->list, d->cursor);
+			if (d->list.a[d->cursor] & mask)
+				ra(d, 0);
+			else
+				push(d, 1);
+			i++;
+		}
+		push(d, -d->cursor);  
+		mask <<= 1;
+	}
+}
+
 int	main(int ac, char **av)
 {
 	t_array		sorted;
@@ -357,7 +380,6 @@ int	main(int ac, char **av)
 		exit(0);
 	}
 	print_stack(data.list, data.cursor);
-	distrib(&data);
-	sort(&data);
+	radix(&data);
 	print_stack(data.list, data.cursor);
 }
