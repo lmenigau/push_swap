@@ -30,7 +30,7 @@ t_array	insertion_sort(t_array a)
 	{
 		sorted[i] = a.a[i];
 		j = i;
-		while (j > 0 &&  sorted[j - 1] > sorted[j])
+		while (j > 0 && sorted[j - 1] > sorted[j])
 		{
 			swap(&sorted[j - 1], &sorted[j]);
 			j--;
@@ -60,6 +60,20 @@ void	remap(t_array a, t_array sorted)
 		}
 		i++;
 	}
+}
+
+int		isdup(t_array list)
+{
+	int		i;
+
+	i = 0;
+	while (i + 1 < list.len)
+	{
+		if (list.a[i + 1] == list.a[i])
+			error();
+		i++;
+	}
+	return (1);
 }
 
 int		issorted(t_array list)
@@ -265,7 +279,6 @@ int		stacka(t_data *d)
 	
 	vra = try_ra(d);
 	vrra = try_rra(d);
-
 	if (vrra < 0 && vrra < vra)
 	{
 		rra(d, 0);
@@ -286,16 +299,15 @@ int		stackb(t_data *d)
 	
 	vrb = try_rb(d);
 	vrrb = try_rrb(d);
-
-	if (vrb < 0 && vrb < vrrb)
-	{
-		rb(d, 0);
-		return (0);
-	}
-	else if (vrrb < 0)
+	if (vrrb < 0 && vrrb < vrb)
 	{
 		rrb(d, 0);
 		return (1);
+	}
+	else if (vrb < 0)
+	{
+		rb(d, 0);
+		return (0);
 	}
 	return (1);
 }
@@ -306,8 +318,8 @@ void	distrib(t_data *d)
 	while (d->cursor < d->list.len)
 	{
 		print_stack(d->list, d->cursor);
-		move = stackb(d);
-		move &= stacka(d);
+		move = stacka(d);
+		move &= stackb(d);
 		if (move)
 			push(d, 1);
 	}
@@ -363,23 +375,31 @@ void	radix(t_data *d)
 	}
 }
 
+void sort_small(t_data *d)
+{
+	stacka(d); 	
+}
+
 int	main(int ac, char **av)
 {
 	t_array		sorted;
 	t_data		data;
 
-	data.top = 0;
-	data.dir = +1;
 	data.cursor = 0;
 	data.list = foreach_arg(ac, av);
 	sorted = insertion_sort(data.list);
+	isdup(sorted);
+	print_stack(sorted, data.cursor);
+	print_stack(data.list, data.cursor);
 	remap(data.list, sorted);
 	if (issorted(data.list))
-	{
 		error();
-		exit(0);
-	}
 	print_stack(data.list, data.cursor);
-	radix(&data);
+	if (data.list.len < 6)
+		sort_small(&data);	
+	else if (data.list.len < 128)
+		sort(&data);
+	else
+		radix(&data);
 	print_stack(data.list, data.cursor);
 }
