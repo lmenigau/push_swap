@@ -1,7 +1,7 @@
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 
-# define MAX_SIZE 10000
+# define MAX_SIZE 150000
 
 typedef struct s_array
 {

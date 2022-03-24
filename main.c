@@ -341,28 +341,25 @@ void	sort(t_data *d)
 	int		s;
 	int		b;
 
-	distrib(d);
 	small = 0;
 	big = d->list.len - 1;
-	while (small < d->list.len)
+	while (small < d->list.len && big >= 0)
 	{
 		print_stack(d->list, d->cursor);
 		s = find(d->list, small) - d->cursor;
-		b = find(d->list, big) - (d->cursor - 1);
-		if (n_abs(s) <= n_abs(b))
+		b = find(d->list, small) - d->cursor;
+		if (b > s)
 		{
-			ra(d, s);
 			small++;
+			ra(d, s);
 		}
-		else
-		{ 
-			rb(d, b);
+		else if (b < s)
+		{
 			big--;
+			rb(d, b);
 		}
 	}
-	//push(d, -d->cursor);  
-	fprintf(stderr, "%d\n", d->cursor);
-	fflush(stderr);
+	push(d, -d->cursor);  
 }
 
 void	radix(t_data *d)
@@ -388,9 +385,52 @@ void	radix(t_data *d)
 	}
 }
 
-void sort_small(t_data *d)
+void	sa(t_data *d)
 {
-	stacka(d); 	
+	if (d->cursor > d->list.len - 1)
+		return ;
+	if (d->list.a[d->cursor] > d->list.a[d->cursor + 1])
+	{
+		swap(&d->list.a[d->cursor], &d->list.a[d->cursor + 1]);
+		write(1, "sa\n", 3);
+	}
+}	
+
+int		sort_3(t_data *d)
+{
+	stacka(d);
+	sa(d);
+	stacka(d);
+	if(issorted(d->list))
+		return (1);
+	rra(d, 0);
+	sa(d);
+	if(issorted(d->list))
+		return (1);
+	return (0);
+}
+
+void	sort_small(t_data *d)
+{
+	int		i;
+
+	i = 0;
+	if (d->list.len > 3)
+	{
+		stacka(d);
+		while (d->list.a[d->cursor] != 0)
+			ra(d, 0);
+		push(d, 1);
+	}
+	if (d->list.len > 4)
+	{
+		stacka(d);
+		while (d->list.a[d->cursor] != 1)
+			ra(d, 0);
+		push(d, 1);
+	}
+	sort_3(d);
+	push(d, -d->cursor);
 }
 
 int	main(int ac, char **av)
@@ -404,8 +444,6 @@ int	main(int ac, char **av)
 	data.list = foreach_arg(ac, av);
 	sorted = insertion_sort(data.list);
 	isdup(sorted);
-	print_stack(sorted, data.cursor);
-	print_stack(data.list, data.cursor);
 	remap(data.list, sorted);
 	if (issorted(data.list))
 		exit(0);
@@ -413,7 +451,10 @@ int	main(int ac, char **av)
 	if (data.list.len < 6)
 		sort_small(&data);	
 	else if (data.list.len < 128)
+	{
+		distrib(&data);
 		sort(&data);
+	}
 	else
 		radix(&data);
 	print_stack(data.list, data.cursor);

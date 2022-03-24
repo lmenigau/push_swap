@@ -52,9 +52,11 @@ void	parse_arg(char *arg, int *restrict tab, int *restrict count)
 t_array	foreach_arg(int ac, char **av)
 {
 	int			i;
-	static int	a[100000];
+	static int	a[MAX_SIZE];
 	static int	count;
 
+	if (ac > MAX_SIZE)
+		error();
 	i = 1;
 	while (i < ac)
 	{
