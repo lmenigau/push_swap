@@ -6,7 +6,7 @@
 /*   By: lomeniga <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 07:15:06 by lomeniga          #+#    #+#             */
-/*   Updated: 2022/03/25 07:15:08 by lomeniga         ###   ########.fr       */
+/*   Updated: 2022/03/25 11:16:21 by lomeniga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ int	parse_int(char *str, int *i)
 
 	res = 0;
 	neg = 1;
-	while (is_space(str[*i]))
-		(*i)++;
 	if (str[*i] == '-')
 	{
 		neg = -1;
@@ -56,10 +54,12 @@ void	parse_arg(char *arg, int *restrict tab, int *restrict count)
 	i = 0;
 	while (arg[i])
 	{
+		while (is_space(arg[i]))
+			i++;
 		tab[*count] = parse_int(arg, &i);
 		(*count)++;
-		if (arg[i] && !is_space(arg[i]))
-			error();
+		while (is_space(arg[i]))
+			i++;
 	}
 }
 
