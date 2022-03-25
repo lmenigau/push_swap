@@ -282,7 +282,7 @@ int		stacka(t_data *d)
 	if (vrra < 0 && vrra < vra)
 	{
 		rra(d, 0);
-		return (0);
+		return (1);
 	}
 	else if (vra < 0)
 	{
@@ -302,39 +302,29 @@ int		stackb(t_data *d)
 	if (vrrb < 0 && vrrb < vrb)
 	{
 		rrb(d, 0);
-		return (1);
+		return (0);
 	}
 	else if (vrb < 0)
 	{
 		rb(d, 0);
-		return (0);
+		return (-1);
 	}
-	return (1);
+	return (0);
 }
 
 void	distrib(t_data *d)
 {
 	int		move;
 
-	while (d->cursor < d->list.len)
+	while (d->cursor >= 0 && d->cursor < d->list.len)
 	{
 		print_stack(d->list, d->cursor);
-		move = stacka(d);
-		move &= stackb(d);
-		if (move)
-			push(d, 1);
-	}
-	while (d->cursor > 0)
-	{
-		print_stack(d->list, d->cursor);
-		move = stacka(d);
-		move &= stackb(d);
-		if (move)
-			push(d, -1);
+		move = stacka(d) + stackb(d);
+		push(d, move);
 	}
 }
 
-void	sort(t_data *d)
+void    sort(t_data *d)
 {
 	int		small;
 	int		big;
@@ -343,23 +333,13 @@ void	sort(t_data *d)
 
 	small = 0;
 	big = d->list.len - 1;
-	while (small < d->list.len && big >= 0)
+	while (small <= big)
 	{
-		print_stack(d->list, d->cursor);
 		s = find(d->list, small) - d->cursor;
-		b = find(d->list, small) - d->cursor;
-		if (b > s)
-		{
-			small++;
-			ra(d, s);
-		}
-		else if (b < s)
-		{
-			big--;
-			rb(d, b);
-		}
+		b = find(d->list, big) - (d->cursor - 1);
+		ra(d, s);
+		small++;
 	}
-	push(d, -d->cursor);  
 }
 
 void	radix(t_data *d)
