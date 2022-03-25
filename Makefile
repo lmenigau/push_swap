@@ -1,6 +1,7 @@
-SRC		= main.c foreach_arg.c
+SRC		= array_util.c distrib.c foreach_arg.c main.c\
+		  radix.c sort_small.c stack_op.c try.c
 OBJ		= $(SRC:.c=.o)
-CFLAGS	= -g -Wall -Wextra -fsanitize=address
+CFLAGS	= -g -Wall -Wextra -Werror 
 NAME	= push_swap
 CC		= clang
 ifeq  '$(shell ar V 2>/dev/null | head -c 3)' 'GNU'
