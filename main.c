@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lomeniga <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/25 07:41:14 by lomeniga          #+#    #+#             */
+/*   Updated: 2022/03/25 07:49:08 by lomeniga         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 #include <stdlib.h>
 #include "push_swap.h"
@@ -31,7 +43,7 @@ int	main(int ac, char **av)
 	if (issorted(data.list))
 		exit(0);
 	if (data.list.len < 6)
-		sort_small(&data);	
+		sort_small(&data);
 	else if (data.list.len < 128)
 	{
 		distrib(&data);
