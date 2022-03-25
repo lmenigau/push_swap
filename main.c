@@ -1,7 +1,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "push_swap.h"
-#include "print.c"
 
 void	error(void)
 {
@@ -25,7 +24,7 @@ t_array	insertion_sort(t_array a)
 	int			j;
 
 	i = 1;
-	sorted[0] = a.a[0]; 
+	sorted[0] = a.a[0];
 	while (i < a.len)
 	{
 		sorted[i] = a.a[i];
@@ -62,7 +61,7 @@ void	remap(t_array a, t_array sorted)
 	}
 }
 
-int		isdup(t_array list)
+int	isdup(t_array list)
 {
 	int		i;
 
@@ -76,7 +75,7 @@ int		isdup(t_array list)
 	return (1);
 }
 
-int		issorted(t_array list)
+int	issorted(t_array list)
 {
 	int		i;
 
@@ -100,15 +99,15 @@ int	n_abs(int n)
 
 void	push(t_data *d, int dist)
 {
-	int i;
-	char *str;
+	int		i;
+	char	*str;
 
 	d->cursor += dist;
 	if (dist < 0)
 		str = "pa\n";
-	else 
+	else
 		str = "pb\n";
-	i = 0; 
+	i = 0;
 	while (i < n_abs(dist))
 	{
 		write(1, str, 3);
@@ -116,10 +115,10 @@ void	push(t_data *d, int dist)
 	}
 }
 
-void 	rb(t_data *d, int dist)
+void	rb(t_data *d, int dist)
 {
-	int save;
-	int i;
+	int		save;
+	int		i;
 
 	push(d, dist);
 	if (d->cursor < 1)
@@ -135,10 +134,10 @@ void 	rb(t_data *d, int dist)
 	write(1, "rb\n", 3);
 }
 
-void 	ra(t_data *d, int dist)
+void	ra(t_data *d, int dist)
 {
-	int save;
-	int i;
+	int		save;
+	int		i;
 
 	push(d, dist);
 	save = d->list.a[d->cursor];
@@ -152,10 +151,10 @@ void 	ra(t_data *d, int dist)
 	write(1, "ra\n", 3);
 }
 
-void 	rrb(t_data *d, int dist)
+void	rrb(t_data *d, int dist)
 {
-	int save;
-	int i;
+	int		save;
+	int		i;
 
 	push(d, dist);
 	save = d->list.a[0];
@@ -169,10 +168,10 @@ void 	rrb(t_data *d, int dist)
 	write(1, "rrb\n", 4);
 }
 
-void 	rra(t_data *d, int dist)
+void	rra(t_data *d, int dist)
 {
-	int save;
-	int i;
+	int		save;
+	int		i;
 
 	push(d, dist);
 	save = d->list.a[d->list.len - 1];
@@ -186,7 +185,7 @@ void 	rra(t_data *d, int dist)
 	write(1, "rra\n", 4);
 }
 
-int		find(t_array a, int n)
+int	find(t_array a, int n)
 {
 	int		i;
 
@@ -196,90 +195,90 @@ int		find(t_array a, int n)
 	return (i);
 }
 
-int     try_ra(t_data *d)
+int	try_ra(t_data *d)
 {
-        int     new;
-        int     elem;
-        int 	before;
-        int     after;
+	int		new;
+	int		elem;
+	int		before;
+	int		after;
 
-		if (d->cursor > d->list.len - 2)
-			return (0);
-        elem = d->list.a[d->cursor];
-        new = d->list.len - 1;
-        before = n_abs(d->cursor - elem);
-        after = n_abs(new - elem);
-        return (after - before);
+	if (d->cursor > d->list.len - 2)
+		return (0);
+	elem = d->list.a[d->cursor];
+	new = d->list.len - 1;
+	before = n_abs(d->cursor - elem);
+	after = n_abs(new - elem);
+	return (after - before);
 }
 
-int     try_rra(t_data *d)
+int	try_rra(t_data *d)
 {
-        int     new;
-        int     elem;
-        int 	before;
-        int     after;
+	int		new;
+	int		elem;
+	int		before;
+	int		after;
 
-		if (d->cursor > d->list.len - 2)
-			return (0);
-        elem = d->list.a[d->list.len - 1];
-		new = d->cursor;
-        before = n_abs(d->list.len - 1 - elem);
-        after = n_abs(new - elem);
-        return (after - before);
+	if (d->cursor > d->list.len - 2)
+		return (0);
+	elem = d->list.a[d->list.len - 1];
+	new = d->cursor;
+	before = n_abs(d->list.len - 1 - elem);
+	after = n_abs(new - elem);
+	return (after - before);
 }
 
-int     try_rb(t_data *d)
+int	try_rb(t_data *d)
 {
-        int     new;
-        int     elem;
-        int 	before;
-        int     after;
+	int		new;
+	int		elem;
+	int		before;
+	int		after;
 
-		if (d->cursor < 2)
-			return (0);
-        elem = d->list.a[d->cursor - 1];
-        new = 0;
-        before = n_abs(d->cursor - 1 - elem);
-        after = n_abs(new - elem);
-        return (after - before);
+	if (d->cursor < 2)
+		return (0);
+	elem = d->list.a[d->cursor - 1];
+	new = 0;
+	before = n_abs(d->cursor - 1 - elem);
+	after = n_abs(new - elem);
+	return (after - before);
 }
 
-int     try_rrb(t_data *d)
+int	try_rrb(t_data *d)
 {
-        int     new;
-        int     elem;
-        int 	before;
-        int     after;
+	int		new;
+	int		elem;
+	int		before;
+	int		after;
 
-		if (d->cursor < 2)
-			return (0);
-        elem = d->list.a[0];
-        new = d->cursor - 1;
-        before = n_abs(0 - elem);
-        after = n_abs(new - elem);
-        return (after - before);
+	if (d->cursor < 2)
+		return (0);
+	elem = d->list.a[0];
+	new = d->cursor - 1;
+	before = n_abs(0 - elem);
+	after = n_abs(new - elem);
+	return (after - before);
 }
 
 void	rr(t_data  *d)
 {
-			ra(d, 0);
-			rb(d, 0);
+	ra(d, 0);
+	rb(d, 0);
 }
 
-void	rrr(t_data  *d)
+void	rrr(t_data *d)
 {
-			rra(d, 0);
-			rrb(d, 0);
+	rra(d, 0);
+	rrb(d, 0);
 }
 
-int		stacka(t_data *d)
+int	stacka(t_data *d)
 {
 	int		vra;
 	int		vrra;
-	
+
 	vra = try_ra(d);
 	vrra = try_rra(d);
-	if (vrra < 0 && vrra < vra)
+	if (vrra < 0 && vrra <= vra)
 	{
 		rra(d, 0);
 		return (1);
@@ -292,11 +291,11 @@ int		stacka(t_data *d)
 	return (1);
 }
 
-int		stackb(t_data *d)
+int	stackb(t_data *d)
 {
 	int		vrb;
 	int		vrrb;
-	
+
 	vrb = try_rb(d);
 	vrrb = try_rrb(d);
 	if (vrrb < 0 && vrrb < vrb)
@@ -318,13 +317,12 @@ void	distrib(t_data *d)
 
 	while (d->cursor >= 0 && d->cursor < d->list.len)
 	{
-		print_stack(d->list, d->cursor);
 		move = stacka(d) + stackb(d);
 		push(d, move);
 	}
 }
 
-void    sort(t_data *d)
+void	sort(t_data *d)
 {
 	int		small;
 	int		big;
@@ -344,23 +342,22 @@ void    sort(t_data *d)
 
 void	radix(t_data *d)
 {
-	int mask;
-	int	i;
+	int		mask;
+	int		i;
 
 	mask = 1;
 	while (mask <= d->list.len)
 	{
 		i = 0;
-		while(i < d->list.len)
+		while (i < d->list.len)
 		{
-			print_stack(d->list, d->cursor);
 			if (d->list.a[d->cursor] & mask)
 				ra(d, 0);
 			else
 				push(d, 1);
 			i++;
 		}
-		push(d, -d->cursor);  
+		push(d, -d->cursor);
 		mask <<= 1;
 	}
 }
@@ -376,16 +373,16 @@ void	sa(t_data *d)
 	}
 }	
 
-int		sort_3(t_data *d)
+int	sort_3(t_data *d)
 {
 	stacka(d);
 	sa(d);
 	stacka(d);
-	if(issorted(d->list))
+	if (issorted(d->list))
 		return (1);
 	rra(d, 0);
 	sa(d);
-	if(issorted(d->list))
+	if (issorted(d->list))
 		return (1);
 	return (0);
 }
@@ -427,7 +424,6 @@ int	main(int ac, char **av)
 	remap(data.list, sorted);
 	if (issorted(data.list))
 		exit(0);
-	print_stack(data.list, data.cursor);
 	if (data.list.len < 6)
 		sort_small(&data);	
 	else if (data.list.len < 128)
@@ -437,5 +433,4 @@ int	main(int ac, char **av)
 	}
 	else
 		radix(&data);
-	print_stack(data.list, data.cursor);
 }

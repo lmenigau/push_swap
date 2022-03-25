@@ -25,6 +25,8 @@ int	parse_int(char *str, int *i)
 		neg = -1;
 		(*i)++;
 	}
+	if (!is_num(str[*i]))
+		error();
 	while (str[*i] && is_num(str[*i]))
 	{
 		res = res * 10 + (str[*i] - '0') * neg;
